@@ -1,8 +1,11 @@
-pub mod crypto;
+pub mod clients;
+pub use clients::{Client, StockClient};
+
 pub mod endpoint;
-pub mod news;
+pub use endpoint::Endpoint;
+
+pub mod common;
 pub mod stock;
-pub mod websocket;
 
 pub type Error = Box<dyn std::error::Error + Send + Sync>;
 pub type Result<T> = std::result::Result<T, Error>;

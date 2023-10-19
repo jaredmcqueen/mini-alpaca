@@ -1,5 +1,8 @@
+use crate::common;
 use serde::Deserialize;
 use serde::Serialize;
+
+// TODO: how much can I move out?
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 #[serde(untagged)]
@@ -12,19 +15,13 @@ pub enum StockData {
 #[serde(tag = "action")]
 pub enum Message {
     #[serde(rename = "auth")]
-    Auth(Auth),
+    Auth(common::Auth),
 
     #[serde(rename = "subscribe")]
     Subscribe(Subscribe),
 
     #[serde(rename = "unsubscribe")]
     Unsubscribe(Subscribe),
-}
-
-#[derive(Deserialize, Serialize, Debug, Clone)]
-pub struct Auth {
-    pub key: String,
-    pub secret: String,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, Default)]
@@ -55,10 +52,10 @@ pub struct Subscribe {
 #[serde(tag = "T")]
 pub enum Event {
     #[serde(rename = "success")]
-    Success(Success),
+    Success(common::Success),
 
     #[serde(rename = "error")]
-    Error(Error),
+    Error(common::Error),
 
     #[serde(rename = "subscription")]
     Subscription(Subscription),
@@ -91,21 +88,20 @@ pub enum Event {
     Lulds(Luld),
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
-#[serde(tag = "T")]
-pub struct Success {
-    #[serde(rename = "msg")]
-    pub message: String,
-}
+// #[derive(Debug, Serialize, Deserialize, Clone)]
+// pub struct Success {
+//     #[serde(rename = "msg")]
+//     pub message: String,
+// }
 
-#[derive(Deserialize, Serialize, Debug, Clone)]
-pub struct Error {
-    #[serde(rename = "msg")]
-    pub message: String,
-
-    #[serde(rename = "code")]
-    pub code: u16,
-}
+// #[derive(Deserialize, Serialize, Debug, Clone)]
+// pub struct Error {
+//     #[serde(rename = "msg")]
+//     pub message: String,
+//
+//     #[serde(rename = "code")]
+//     pub code: u16,
+// }
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Subscription {
