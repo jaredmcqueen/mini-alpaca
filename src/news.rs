@@ -1,6 +1,24 @@
 use serde::Deserialize;
 use serde::Serialize;
 
+// [
+//     {
+//         "T": "n",
+//         "id": 35399135,
+//         "headline": "RBC Capital Reiterates Outperform on PNC Finl Servs Gr, Maintains $140 Price Target",
+//         "summary": "RBC Capital  analyst Gerard Cassidy   reiterates PNC Finl Servs Gr (NYSE:PNC) with a Outperform and maintains $140 price target.",
+//         "author": "Benzinga Newsdesk",
+//         "created_at": "2023-10-24T16:28:52Z",
+//         "updated_at": "2023-10-24T16:28:52Z",
+//         "url": "https://www.benzinga.com/news/23/10/35399135/rbc-capital-reiterates-outperform-on-pnc-finl-servs-gr-maintains-140-price-target",
+//         "content": "RBC Capital  analyst Gerard Cassidy   reiterates PNC Finl Servs Gr",
+//         "symbols": [
+//             "PNC"
+//         ],
+//         "source": "benzinga"
+//     }
+// ]
+
 #[derive(Deserialize, Serialize, Debug, Clone)]
 #[serde(untagged)]
 pub enum NewsData {

@@ -88,21 +88,6 @@ pub enum Event {
     Lulds(Luld),
 }
 
-// #[derive(Debug, Serialize, Deserialize, Clone)]
-// pub struct Success {
-//     #[serde(rename = "msg")]
-//     pub message: String,
-// }
-
-// #[derive(Deserialize, Serialize, Debug, Clone)]
-// pub struct Error {
-//     #[serde(rename = "msg")]
-//     pub message: String,
-//
-//     #[serde(rename = "code")]
-//     pub code: u16,
-// }
-
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Subscription {
     #[serde(rename = "trades")]
@@ -139,22 +124,22 @@ pub struct Trade {
     pub symbol: String,
 
     #[serde(rename = "i")]
-    pub trade_id: u64,
+    pub id: u64,
 
     #[serde(rename = "x")]
     pub exchange_code: String,
 
     #[serde(rename = "p")]
-    pub trade_price: f64,
+    pub price: f64,
 
     #[serde(rename = "s")]
-    pub trade_size: u64,
+    pub size: u64,
 
     #[serde(rename = "t")]
     pub timestamp: String,
 
     #[serde(rename = "c")]
-    pub trade_condition: Vec<String>,
+    pub condition: Vec<String>,
 
     #[serde(rename = "z")]
     pub tape: String,
@@ -205,7 +190,7 @@ pub struct TradeCancel {
     pub symbol: String,
 
     #[serde(rename = "i")]
-    pub trade_id: u64,
+    pub id: u64,
 
     #[serde(rename = "x")]
     pub exchange_code: String,
@@ -250,7 +235,7 @@ pub struct Quote {
     pub bid_size: u64,
 
     #[serde(rename = "c")]
-    pub quote_condition: Vec<String>,
+    pub condition: Vec<String>,
 
     #[serde(rename = "t")]
     pub timestamp: String,

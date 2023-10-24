@@ -84,7 +84,7 @@ impl Client {
                 }
                 Ok(Some(msg))
             }
-            Message::Close(_) => Err("closed".into()),
+            Message::Close(_) => Err("websocket closed".into()),
             // TODO: add ping/pong response?
             _ => Ok(None),
         }

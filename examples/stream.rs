@@ -29,11 +29,17 @@ async fn main() -> Result<()> {
         }
     });
 
-    let mut stock_client = StockClient::connect(Endpoint::StocksProductionSip, tx_stock).await?;
+    let handler = |event| {
+        tx_stock.send(event).unwrap();
+        Ok(())
+    };
+
+    let mut stock_client: StockClient<stock::Event> =
+        StockClient::new(Endpoint::StocksProductionSip, handler).await?;
     stock_client
         .subscribe(stock::Subscribe {
             // trades: Some(vec!["*".into()]),
-            quotes: Some(vec!["TSLA".into()]),
+            quotes: Some(vec!["*".into()]),
             // bars: Some(vec!["*".into()]),
             // daily_bars: Some(vec!["*".into()]),
             // updated_bars: Some(vec!["*".into()]),
