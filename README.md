@@ -7,7 +7,9 @@ issues, merge requests, and general feedback always appreciated.
 <img src="https://github.com/jaredmcqueen/mini-alpaca/assets/3491953/d4e963e9-51b9-4863-9342-b05a570b1fbc" width="256">
 
 ## goals
-- [X] websocket client for real-time data
+- [X] websocket client for real-time stocks
+- [X] websocket client for real-time crypto
+- [X] websocket client for real-time news
 - [ ] http client for everything else
 - [ ] prometheus metrics & tracing
 - [ ] tests and code coverage
