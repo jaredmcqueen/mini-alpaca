@@ -121,16 +121,16 @@ pub struct Trade {
     pub symbol: String,
 
     #[serde(rename = "p")]
-    pub trade_price: f64,
+    pub price: f64,
 
     #[serde(rename = "s")]
-    pub trade_size: f64,
+    pub size: f64,
 
     #[serde(rename = "t")]
     pub timestamp: String,
 
     #[serde(rename = "i")]
-    pub trade_id: u64,
+    pub id: u64,
 
     #[serde(rename = "tks")]
     pub taker_side: String,
@@ -139,10 +139,10 @@ pub struct Trade {
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Book {
     #[serde(rename = "p")]
-    price: f64,
+    pub price: f64,
 
     #[serde(rename = "s")]
-    size: f64,
+    pub size: f64,
 }
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct OrderBook {
