@@ -1,3 +1,7 @@
+use crate::common::deserialize_datetime_as_u64;
+use crate::common::Auth;
+use crate::common::Error;
+use crate::common::Success;
 use serde::Deserialize;
 use serde::Serialize;
 
@@ -19,12 +23,6 @@ pub enum Message {
 
     #[serde(rename = "unsubscribe")]
     Unsubscribe(Subscribe),
-}
-
-#[derive(Deserialize, Serialize, Debug, Clone)]
-pub struct Auth {
-    pub key: String,
-    pub secret: String,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, Default)]
@@ -79,21 +77,6 @@ pub enum Event {
     UpdatedBar(Bar),
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct Success {
-    #[serde(rename = "msg")]
-    pub message: String,
-}
-
-#[derive(Deserialize, Serialize, Debug, Clone)]
-pub struct Error {
-    #[serde(rename = "msg")]
-    pub message: String,
-
-    #[serde(rename = "code")]
-    pub code: u16,
-}
-
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Subscription {
     #[serde(rename = "trades")]
@@ -126,8 +109,8 @@ pub struct Trade {
     #[serde(rename = "s")]
     pub size: f64,
 
-    #[serde(rename = "t")]
-    pub timestamp: String,
+    #[serde(deserialize_with = "deserialize_datetime_as_u64", rename = "t")]
+    pub timestamp: u64,
 
     #[serde(rename = "i")]
     pub id: u64,
@@ -149,8 +132,8 @@ pub struct OrderBook {
     #[serde(rename = "S")]
     pub symbol: String,
 
-    #[serde(rename = "t")]
-    pub timestamp: String,
+    #[serde(deserialize_with = "deserialize_datetime_as_u64", rename = "t")]
+    pub timestamp: u64,
 
     #[serde(rename = "b")]
     pub bid: Vec<Book>,
@@ -179,8 +162,8 @@ pub struct Quote {
     #[serde(rename = "as")]
     pub ask_size: f64,
 
-    #[serde(rename = "t")]
-    pub timestamp: String,
+    #[serde(deserialize_with = "deserialize_datetime_as_u64", rename = "t")]
+    pub timestamp: u64,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
@@ -203,8 +186,8 @@ pub struct Bar {
     #[serde(rename = "v")]
     pub volume: f64,
 
-    #[serde(rename = "t")]
-    pub timestamp: String,
+    #[serde(deserialize_with = "deserialize_datetime_as_u64", rename = "t")]
+    pub timestamp: u64,
 
     #[serde(rename = "n")]
     pub num_trades: u64,
