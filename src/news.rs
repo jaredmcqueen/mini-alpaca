@@ -1,6 +1,11 @@
 use serde::Deserialize;
 use serde::Serialize;
 
+use crate::common::deserialize_datetime_as_u64;
+use crate::common::Auth;
+use crate::common::Error;
+use crate::common::Success;
+
 // [
 //     {
 //         "T": "n",
@@ -39,12 +44,6 @@ pub enum Message {
     Unsubscribe(Subscribe),
 }
 
-#[derive(Deserialize, Serialize, Debug, Clone)]
-pub struct Auth {
-    pub key: String,
-    pub secret: String,
-}
-
 #[derive(Deserialize, Serialize, Debug, Clone, Default)]
 pub struct Subscribe {
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -67,34 +66,22 @@ pub enum Event {
     News(News),
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct Success {
-    #[serde(rename = "msg")]
-    pub message: String,
-}
-
-#[derive(Deserialize, Serialize, Debug, Clone)]
-pub struct Error {
-    #[serde(rename = "msg")]
-    pub message: String,
-
-    #[serde(rename = "code")]
-    pub code: u16,
-}
-
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Subscription {
     pub news: Vec<String>,
 }
 
+// "[{"T":"n","id":35443956,"headline":"EMCOR Group shares are trading higher after the company reported better-than-expected Q3 financial results and raised FY23 revenue guidance above estimates.","summary":"","author":"Benzinga Newsdesk","created_at":"2023-10-26T15:28:26Z","updated_at":"2023-10-26T15:28:26Z","url":"https://www.benzinga.com/wiim/23/10/35443956/emcor-group-shares-are-trading-higher-after-the-company-reported-better-than-expected-q3-financial-r","content":"","symbols":["EME"],"source":"benzinga"}]"
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct News {
     pub id: u64,
     pub headline: String,
     pub summary: String,
     pub author: String,
-    pub created_at: String,
-    pub updated_at: String,
+    #[serde(deserialize_with = "deserialize_datetime_as_u64")]
+    pub created_at: u64,
+    #[serde(deserialize_with = "deserialize_datetime_as_u64")]
+    pub updated_at: u64,
     pub url: String,
     pub content: String,
     pub symbols: Vec<String>,

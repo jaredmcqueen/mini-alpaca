@@ -39,6 +39,7 @@ impl<'a, T: serde::de::DeserializeOwned> NewsClient<'a, T> {
     pub async fn event_loop(&mut self, running: &AtomicBool) -> crate::Result<()> {
         while running.load(Ordering::Relaxed) {
             if let Some(message) = self.inner.get_next_message().await? {
+                dbg!(&message);
                 let events: Vec<T> = serde_json::from_str(&message)?;
                 for event in events {
                     (self.handler)(event)?;

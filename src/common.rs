@@ -1,5 +1,30 @@
+use chrono::DateTime;
+use chrono::Utc;
 use serde::Deserialize;
+use serde::Deserializer;
 use serde::Serialize;
+
+pub fn deserialize_datetime_as_u64<'de, D>(deserializer: D) -> Result<u64, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    let str_val = String::deserialize(deserializer)?;
+    let datetime: DateTime<Utc> = match DateTime::parse_from_rfc3339(&str_val) {
+        Ok(dt) => dt.with_timezone(&Utc),
+        Err(err) => {
+            return Err(serde::de::Error::custom(format!(
+                "Invalid datetime: {}",
+                err
+            )))
+        }
+    };
+
+    // Convert to nanoseconds
+    match datetime.timestamp_nanos_opt() {
+        Some(n) => Ok(n as u64),
+        None => Err(serde::de::Error::custom("nanoseconds out of range")),
+    }
+}
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 #[serde(tag = "T")]

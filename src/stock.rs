@@ -1,8 +1,9 @@
-use crate::common;
+use crate::common::deserialize_datetime_as_u64;
+use crate::common::Auth;
+use crate::common::Error;
+use crate::common::Success;
 use serde::Deserialize;
 use serde::Serialize;
-
-// TODO: how much can I move out?
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 #[serde(untagged)]
@@ -15,7 +16,7 @@ pub enum StockData {
 #[serde(tag = "action")]
 pub enum Message {
     #[serde(rename = "auth")]
-    Auth(common::Auth),
+    Auth(Auth),
 
     #[serde(rename = "subscribe")]
     Subscribe(Subscribe),
@@ -52,10 +53,10 @@ pub struct Subscribe {
 #[serde(tag = "T")]
 pub enum Event {
     #[serde(rename = "success")]
-    Success(common::Success),
+    Success(Success),
 
     #[serde(rename = "error")]
-    Error(common::Error),
+    Error(Error),
 
     #[serde(rename = "subscription")]
     Subscription(Subscription),
@@ -118,6 +119,7 @@ pub struct Subscription {
     pub cancel_errors: Vec<String>,
 }
 
+// [{"T":"t","S":"TSLA","i":310149,"x":"D","p":211.9657,"s":100,"c":["@"],"z":"C","t":"2023-10-26T14:57:24.089225265Z"}]
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Trade {
     #[serde(rename = "S")]
@@ -135,8 +137,8 @@ pub struct Trade {
     #[serde(rename = "s")]
     pub size: u64,
 
-    #[serde(rename = "t")]
-    pub timestamp: String,
+    #[serde(deserialize_with = "deserialize_datetime_as_u64", rename = "t")]
+    pub timestamp: u64,
 
     #[serde(rename = "c")]
     pub condition: Vec<String>,
@@ -177,8 +179,8 @@ pub struct TradeCorrection {
     #[serde(rename = "cc")]
     pub corrected_conditions: Vec<String>,
 
-    #[serde(rename = "t")]
-    pub timestamp: String,
+    #[serde(deserialize_with = "deserialize_datetime_as_u64", rename = "t")]
+    pub timestamp: u64,
 
     #[serde(rename = "z")]
     pub tape: String,
@@ -204,13 +206,14 @@ pub struct TradeCancel {
     #[serde(rename = "a")]
     pub action: String,
 
-    #[serde(rename = "t")]
-    pub timestamp: String,
+    #[serde(deserialize_with = "deserialize_datetime_as_u64", rename = "t")]
+    pub timestamp: u64,
 
     #[serde(rename = "z")]
     pub tape: String,
 }
 
+// [{"T":"q","S":"TSLA","bx":"U","bp":211.57,"bs":1,"ax":"K","ap":211.6,"as":1,"c":["R"],"z":"C","t":"2023-10-26T14:59:37.095189808Z"}]
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Quote {
     #[serde(rename = "S")]
@@ -237,13 +240,14 @@ pub struct Quote {
     #[serde(rename = "c")]
     pub condition: Vec<String>,
 
-    #[serde(rename = "t")]
-    pub timestamp: String,
+    #[serde(deserialize_with = "deserialize_datetime_as_u64", rename = "t")]
+    pub timestamp: u64,
 
     #[serde(rename = "z")]
     pub tape: String,
 }
 
+// [{"T":"b","S":"UHAL.B","o":48.815,"h":48.815,"l":48.79,"c":48.79,"v":303,"t":"2023-10-26T15:02:00Z","n":6,"vw":48.806106}]
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Bar {
     #[serde(rename = "S")]
@@ -264,10 +268,11 @@ pub struct Bar {
     #[serde(rename = "v")]
     pub volume: u64,
 
-    #[serde(rename = "t")]
-    pub timestamp: String,
+    #[serde(deserialize_with = "deserialize_datetime_as_u64", rename = "t")]
+    pub timestamp: u64,
 }
 
+// [{"T":"l","S":"META","u":302.76,"d":273.92,"i":"B","t":"2023-10-26T15:09:52.602444353Z","z":"C"}]
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Luld {
     #[serde(rename = "S")]
@@ -282,8 +287,8 @@ pub struct Luld {
     #[serde(rename = "i")]
     pub indicator: String,
 
-    #[serde(rename = "t")]
-    pub timestamp: String,
+    #[serde(deserialize_with = "deserialize_datetime_as_u64", rename = "t")]
+    pub timestamp: u64,
 
     #[serde(rename = "z")]
     pub tape: String,
@@ -306,8 +311,8 @@ pub struct Status {
     #[serde(rename = "rm")]
     pub reason_message: String,
 
-    #[serde(rename = "t")]
-    pub timestamp: String,
+    #[serde(deserialize_with = "deserialize_datetime_as_u64", rename = "t")]
+    pub timestamp: u64,
 
     #[serde(rename = "z")]
     pub tape: String,
